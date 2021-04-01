@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QVector>
+class QCustomPlot;
 
 namespace Ui {
 class MainWindow;
@@ -24,8 +26,11 @@ private slots:
 
     void on_pushButtonClean_clicked();
 
+    void on_spinBoxNRandomValues_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
+    QCustomPlot* _pPlot;
     QTimer* _updateTimer;
     double _curProbability; //Параметр p
     int _nTests;            //Параметр N

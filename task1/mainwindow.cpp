@@ -2,6 +2,11 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <qcustomplot.h>
+#include <QPen>
+#include <QColor>
+#include <QPixmap>
+#include <QClipboard>
 
 const double pi = 3.1415926535897932384626433832795;
 
@@ -10,23 +15,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    _pPlot = new QCustomPlot(this);
+    ui->plotLayout->addWidget(_pPlot);
     _updateTimer = new QTimer();                        //Выделили память под объект таймера
     _updateTimer->setSingleShot(false);                 //Таймауты таймера теперь случаются периодически а не один раз
     connect(_updateTimer, &QTimer::timeout, this, &MainWindow::update); //Присоединили сигнал окончания таймера
                                                                         //к слоту обновления графика (проведения испытания
 
     //Задали шрифт подписей осей
-    ui->widgetGraph->xAxis->setTickLabelFont(QFont("Times", 12));
-    ui->widgetGraph->yAxis->setTickLabelFont(QFont("Times", 12));
-    ui->widgetGraph->xAxis->setLabelFont(QFont("Times", 12));
-    ui->widgetGraph->yAxis->setLabelFont(QFont("Times", 12));
+    _pPlot->xAxis->setTickLabelFont(QFont("Times", 12));
+    _pPlot->yAxis->setTickLabelFont(QFont("Times", 12));
+    _pPlot->xAxis->setLabelFont(QFont("Times", 12));
+    _pPlot->yAxis->setLabelFont(QFont("Times", 12));
 
     //Добили подписи осей графика
-    ui->widgetGraph->xAxis->setLabel("Значение случайной величины");
-    ui->widgetGraph->yAxis->setLabel("Процент испытаний в котором\nполучено данное значение");
+    _pPlot->xAxis->setLabel("Значение случайной величины");
+    _pPlot->yAxis->setLabel("Процент испытаний в котором\nполучено данное значение");
 
     //Задали максимальное и минимальное значение, которого может достигнуть график вдоль оси Y
-    ui->widgetGraph->yAxis->setRange(100.0, 0.0);
+    _pPlot->yAxis->setRange(100.0, 0.0);
 }
 
 MainWindow::~MainWindow()
@@ -97,9 +104,9 @@ void MainWindow::on_pushButtonStart_clicked()
     _nTests = ui->spinBoxNumTests->value();
     _nRandomValues = ui->spinBoxNRandomValues->value();
 
-    ui->widgetGraph->xAxis->setRange(_nRandomValues, 0.0);
-    ui->widgetGraph->xAxis->rescale();
-    ui->widgetGraph->repaint();
+    _pPlot->xAxis->setRange(_nRandomValues, 0.0);
+    _pPlot->xAxis->rescale();
+    _pPlot->repaint();
     _updateTimer->start(ui->doubleSpinBoxDelay->value()*1000);  //Запустили таймер
 }
 
@@ -120,21 +127,36 @@ void MainWindow::on_checkBoxGaussApproximation_clicked()
     {
         countGauss();
         QPointer<QCPGraph> mGraph1;
+        mGraph1 = _pPlot->addGraph(_pPlot->xAxis, _pPlot->axisRect()->axis(QCPAxis::atRight, 0));
         QPen pen;
         pen.setWidthF(2.0);
         pen.setStyle(Qt::SolidLine);
         pen.setColor(Qt::blue);
 
-        mGraph1 = ui->widgetGraph->addGraph(ui->widgetGraph->xAxis, ui->widgetGraph->axisRect()->axis(QCPAxis::atRight, 0));
-        mGraph1->setPen(pen);
-        mGraph1->addData(_xGaussValues, _yGaussValues);
-        mGraph1->rescaleValueAxis(false, false);
-        ui->widgetGraph->repaint();
+        _pPlot->graph(0)->setPen(pen);
+        _pPlot->graph(0)->setData(_xGaussValues, _yGaussValues);
 
+        double max = _yGaussValues.at(0);
+        double min = _yGaussValues.at(0);
+        for(int i = 1; i < _yGaussValues.count(); ++i)
+        {
+            if(_yGaussValues.at(i) > max) max = _yGaussValues.at(i);
+            if(_yGaussValues.at(i) < min) min = _yGaussValues.at(i);
+        }
+        _pPlot->yAxis->setRange(max, min);
+        _pPlot->graph(0)->rescaleValueAxis(false, true);
+
+        _pPlot->replot();
     }
 }
 
 void MainWindow::on_pushButtonClean_clicked()
 {
 
+}
+
+void MainWindow::on_spinBoxNRandomValues_valueChanged(int arg1)
+{
+    _pPlot->xAxis->setRange(0.0, arg1);
+    _pPlot->replot();
 }
