@@ -9,6 +9,8 @@
 #include <QClipboard>
 
 const double pi = 3.1415926535897932384626433832795;
+const int mainGraphINdex = 0;
+const int approxGraphIndex = 1;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,6 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     _pPlot = new QCustomPlot(this);
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->axisRect()->axis(QCPAxis::atRight, 0));//Добавили график основной
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->axisRect()->axis(QCPAxis::atRight, 0));//Добавили аппроксимирующий график
+
+
     ui->plotLayout->addWidget(_pPlot);
     _updateTimer = new QTimer();                        //Выделили память под объект таймера
     _updateTimer->setSingleShot(false);                 //Таймауты таймера теперь случаются периодически а не один раз
@@ -34,6 +40,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Задали максимальное и минимальное значение, которого может достигнуть график вдоль оси Y
     _pPlot->yAxis->setRange(100.0, 0.0);
+
+    _mainGaphPen = new QPen();
+    _approxGraphPen = new QPen();
+
+    _approxGraphPen->setWidthF(2.0);
+    _approxGraphPen->setStyle(Qt::SolidLine);
+    _approxGraphPen->setColor(Qt::blue);
 }
 
 MainWindow::~MainWindow()
@@ -65,6 +78,7 @@ void MainWindow::update()
 {
     if(_nTestsReady < _nTests)  //Если провели испытаний меньше чем задано
     {
+        int y = getRandomValue();
 
     }
     else
@@ -90,30 +104,59 @@ void MainWindow::countGauss()
     }
 }
 
+void MainWindow::resizeValueAxis()
+{
+    double max = 0;
+    if(_yValues.isEmpty() == false)
+    {
+        for(int i = 0; i < _yValues.count(); ++i)
+            if(max < _yValues.at(i))
+                max = _yValues.at(i);
+    }
+
+    if(ui->checkBoxGaussApproximation->isChecked())
+    {
+        for(int i = 1; i < _yGaussValues.count(); ++i)
+            if(max < _yGaussValues.at(i))
+                max = _yGaussValues.at(i);
+    }
+    _pPlot->yAxis->setRange(0.0, max);
+    _pPlot->replot();
+}
+
+int MainWindow::getRandomValue()
+{
+    int ret = 0;
+    int x;
+    for(int i = 0; i < _nRandomValues; ++i)
+    {
+        x = qrand() % 100;
+        if(x < _curProbabilityBarrier)
+            ret++;
+    }
+    return ret;
+}
 
 //================= Слоты от оконных элементов =================================================
 void MainWindow::on_pushButtonStart_clicked()
 {
-    qDebug() << "in start";
     switchMode(true);   //Заблокировали/разблокировали поля окошка
     _nTestsReady = 0;   //Инициализировали переменную, показывающую сколько испытаний прошло
 
     //Вот это так то не обязательно, просто удобнее, чтобы не из окна постоянно эти параметры вытаскивать, а чтоб в
     //переменных-членах клаасса лежали.
-    _curProbability = ui->doubleSpinBoxProbability->value();
+    _curProbabilityBarrier = ui->doubleSpinBoxProbability->value();
     _nTests = ui->spinBoxNumTests->value();
     _nRandomValues = ui->spinBoxNRandomValues->value();
 
-    _pPlot->xAxis->setRange(_nRandomValues, 0.0);
-    _pPlot->xAxis->rescale();
-    _pPlot->repaint();
+    update();
     _updateTimer->start(ui->doubleSpinBoxDelay->value()*1000);  //Запустили таймер
 }
 
 void MainWindow::on_pushButtonFinish_clicked()
 {
-    switchMode(false);
     _updateTimer->stop();
+    switchMode(false);
 }
 
 void MainWindow::on_comboBoxGraphShape_currentIndexChanged(int index)
@@ -126,26 +169,18 @@ void MainWindow::on_checkBoxGaussApproximation_clicked()
     if(ui->checkBoxGaussApproximation->isChecked())
     {
         countGauss();
-        QPointer<QCPGraph> mGraph1;
-        mGraph1 = _pPlot->addGraph(_pPlot->xAxis, _pPlot->axisRect()->axis(QCPAxis::atRight, 0));
-        QPen pen;
-        pen.setWidthF(2.0);
-        pen.setStyle(Qt::SolidLine);
-        pen.setColor(Qt::blue);
 
-        _pPlot->graph(0)->setPen(pen);
-        _pPlot->graph(0)->setData(_xGaussValues, _yGaussValues);
+        _pPlot->graph(approxGraphIndex)->setPen(*_approxGraphPen);
+        _pPlot->graph(approxGraphIndex)->setData(_xGaussValues, _yGaussValues);
 
-        double max = _yGaussValues.at(0);
-        double min = _yGaussValues.at(0);
-        for(int i = 1; i < _yGaussValues.count(); ++i)
-        {
-            if(_yGaussValues.at(i) > max) max = _yGaussValues.at(i);
-            if(_yGaussValues.at(i) < min) min = _yGaussValues.at(i);
-        }
-        _pPlot->yAxis->setRange(max, min);
-        _pPlot->graph(0)->rescaleValueAxis(false, true);
-
+        resizeValueAxis();
+        _pPlot->graph(approxGraphIndex)->rescaleValueAxis(false, true);
+        _pPlot->graph(approxGraphIndex)->setVisible(true);
+        _pPlot->replot();
+    }
+    else
+    {
+        _pPlot->graph(approxGraphIndex)->setVisible(false);
         _pPlot->replot();
     }
 }

@@ -32,7 +32,9 @@ private:
     Ui::MainWindow *ui;
     QCustomPlot* _pPlot;
     QTimer* _updateTimer;
-    double _curProbability; //Параметр p
+    QPen* _mainGaphPen;
+    QPen* _approxGraphPen;
+    int _curProbabilityBarrier; //Параметр p
     int _nTests;            //Параметр N
     int _nRandomValues;     //Параметр n
     int _nTestsReady;       //Количество пройденых испытаний
@@ -45,6 +47,8 @@ private:
 
     void switchMode(bool isWorking);
     void countGauss();
+    void resizeValueAxis();
+    int getRandomValue();
 };
 
 #endif // MAINWINDOW_H
