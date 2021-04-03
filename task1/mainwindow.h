@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 class QCustomPlot;
+class QCPBars;
 
 namespace Ui {
 class MainWindow;
@@ -31,16 +32,18 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QCustomPlot* _pPlot;
+    QCPBars* _pBarPlotObj;
     QTimer* _updateTimer;
-    QPen* _mainGaphPen;
-    QPen* _approxGraphPen;
+
     int _curProbabilityBarrier; //Параметр p
     int _nTests;            //Параметр N
     int _nRandomValues;     //Параметр n
     int _nTestsReady;       //Количество пройденых испытаний
 
     QVector<double> _xValues;
-    QVector<double> _yValues;
+    QVector<int> _yValues;
+    QVector<double> _yValuesForView;
+
     QVector<double> _xGaussValues;
     QVector<double> _yGaussValues;
 
