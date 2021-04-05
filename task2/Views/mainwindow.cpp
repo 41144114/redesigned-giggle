@@ -3,7 +3,12 @@
 
 #include "signalview.h"
 #include <QPushButton>
+#include <QMessageBox>
 #include <QDebug>
+#include <QClipboard>
+#include <QWindow>
+#include <QScreen>
+#include "settingswindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     SignalView* testWindow = new SignalView();
     ui->mdiArea->addSubWindow(testWindow);
     setupToolBar();
+    setupMainMenu();
 
 
 }
@@ -91,7 +97,9 @@ void MainWindow::setupToolBar()
 
 void MainWindow::setupMainMenu()
 {
-
+    connect(ui->action_Qt, &QAction::triggered, this, &MainWindow::onAboutQt);
+    connect(ui->actionAboutProgramm, &QAction::triggered, this, &MainWindow::onAboutProgram);
+    connect(ui->actionSettings, &QAction::triggered, this, &MainWindow::onSetupSignals);
 }
 
 void MainWindow::onPb1Click()
@@ -120,6 +128,26 @@ void MainWindow::onPbOnOffClick()
 }
 
 void MainWindow::onScreenShotClick()
+{
+    this->raise();
+    QApplication::clipboard()->setPixmap(QPixmap(this->windowHandle()->screen()->grabWindow(QWidget::winId())));
+}
+
+void MainWindow::onAboutProgram()
+{
+    QMessageBox msg;
+    msg.setWindowTitle("О программе");
+    msg.setIcon(QMessageBox::Information);
+    msg.setText("Задание №2 студентки .....");
+    msg.exec();
+}
+
+void MainWindow::onAboutQt()
+{
+    QMessageBox::aboutQt(this);
+}
+
+void MainWindow::onSetupSignals()
 {
 
 }

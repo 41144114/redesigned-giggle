@@ -22,6 +22,9 @@ private slots:
     void onPb2Click();
     void onPb3Click();
     void onPb4Click();
+    void onAboutQt();
+    void onAboutProgram();
+    void onSetupSignals();
 
 private:
     Ui::MainWindow *ui;
