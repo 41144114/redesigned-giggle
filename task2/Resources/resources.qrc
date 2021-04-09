@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>onOffIcon.png</file>
 		<file>photo.png</file>
+		<file>good.png</file>
+		<file>failure.png</file>
     </qresource>
 </RCC>

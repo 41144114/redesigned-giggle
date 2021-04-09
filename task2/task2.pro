@@ -15,7 +15,8 @@ FORMS += \
     Views/mainwindow.ui \
     Views/signalview.ui \
     Views/generalview.ui \
-    Views/settingswindow.ui
+    Views/settingswindow.ui \
+    Views/simplesignalview.ui
 
 HEADERS += \
     Buiseness/signalgenerator.h \
@@ -23,7 +24,8 @@ HEADERS += \
     Views/qcustomplot.h \
     Views/signalview.h \
     Views/generalview.h \
-    Views/settingswindow.h
+    Views/settingswindow.h \
+    Views/simplesignalview.h
 
 SOURCES += \
     Buiseness/main.cpp \
@@ -32,7 +34,8 @@ SOURCES += \
     Views/qcustomplot.cpp \
     Views/signalview.cpp \
     Views/generalview.cpp \
-    Views/settingswindow.cpp
+    Views/settingswindow.cpp \
+    Views/simplesignalview.cpp
 
 RESOURCES += \
     Resources/resources.qrc
