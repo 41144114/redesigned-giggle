@@ -14,18 +14,22 @@ SettingsWindow::SettingsWindow(QWidget* parent) : QWidget(parent), ui(new Ui::Se
 
 SettingsWindow::~SettingsWindow() { delete ui; }
 
-void SettingsWindow::on_pushButton_2_clicked() { close(); }
+void SettingsWindow::on_pushButton_2_clicked()
+{
+    close(); //Закрыли окно, Раз "отмена" ничего делать и не надо
+}
 
 void SettingsWindow::on_pushButton_clicked()
 {
-    setCurParams();
-    emit signalSetLimits(_curLimits, _curParams);
-    emit signalSetParameters(_curParams);
-    close();
+    setCurParams(); //ВЫчитали значения
+    emit signalSetLimits(_curLimits, _curParams); //Отправили в интерфейс
+    emit signalSetParameters(_curParams);   //Оправили в генератор сигналов
+    close();    //Закрыли окно
 }
 
 void SettingsWindow::setCurParams()
 {
+    //Вычитали из окна все значения
     _curParams.generateFreq = ui->spinBox->value();
     _curParams.sinFreq = 1.0 / ui->doubleSpinBoxPeriod->value();
     _curParams.sinAmp = ui->doubleSpinBoxSinAmp->value();
@@ -48,12 +52,16 @@ void SettingsWindow::setCurParams()
     _curLimits.randomMin = ui->doubleSpinBoxRandomLowLimit->value();
     _curLimits.variantMax = ui->doubleSpinBoxVariantUpLimit->value();
     _curLimits.variantMin = ui->doubleSpinBoxVariantLowLimit->value();
+
+    //Сохранили на всякий в реестр
     saveToRegistry();
 }
 
 void SettingsWindow::showCurParams()
 {
-    loadFromRegistry();
+    loadFromRegistry(); //Вычитали из реестра или поставили дефолтные значения
+
+    //Отобразили все значения в окне
     ui->spinBox->setValue(_curParams.generateFreq);
     ui->doubleSpinBoxPeriod->setValue(1.0 / _curParams.sinFreq);
     ui->doubleSpinBoxSinAmp->setValue(_curParams.sinAmp);
@@ -77,12 +85,15 @@ void SettingsWindow::showCurParams()
     ui->doubleSpinBoxVariantUpLimit->setValue(_curLimits.variantMax);
     ui->doubleSpinBoxVariantLowLimit->setValue(_curLimits.variantMin);
 
+    //Теперь можно показывать и само окно
     show();
 }
 
 void SettingsWindow::saveToRegistry()
 {
-    QSettings obj("PNIPU_ETF", "task2");
+    QSettings obj("PNIPU_ETF", "task2"); //Обозначили, в каком куске реестра будем записывать настройки
+
+    //Далее просто записываем значения всех параметров с ключами, которые потом будем использовать для поиска
     obj.setValue("generateFreq", _curParams.generateFreq);
     obj.setValue("sinFreq", _curParams.sinFreq);
     obj.setValue("sinAmp", _curParams.sinAmp);
@@ -108,7 +119,9 @@ void SettingsWindow::saveToRegistry()
 
 void SettingsWindow::loadFromRegistry()
 {
-    QSettings obj("PNIPU_ETF", "task2");
+    QSettings obj("PNIPU_ETF", "task2");    //Обозначили, в каком куске реестра ищем настройки
+    //Далее принцип простой. Проверяем, если есть значение с данным ключом - берём, если нет - ставим дефолтное
+
     if (obj.contains("generateFreq"))
         _curParams.generateFreq = obj.value("generateFreq").toInt();
     else
@@ -204,6 +217,7 @@ void SettingsWindow::loadFromRegistry()
         _curLimits.variantMin = -10;
 }
 
+//Функция, чтобы запустить процесс с нужными настройками даже не открывая окно с настройками
 void SettingsWindow::autoSetParams()
 {
     emit signalSetLimits(_curLimits, _curParams);

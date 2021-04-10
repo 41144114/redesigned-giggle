@@ -12,8 +12,6 @@ class SignalGenerator : public QObject
 public:
     explicit SignalGenerator(QObject* parent = nullptr);
 
-    void startGenerateSignal();
-
 public slots:
     void startProcess();
     void setParams(signalsParams_t params);

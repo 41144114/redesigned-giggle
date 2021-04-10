@@ -7,22 +7,36 @@
 SignalView::SignalView(QWidget* parent) : QWidget(parent), ui(new Ui::SignalView)
 {
     ui->setupUi(this);
-    _isFailure = false;
+    _isFailure = false; //Пока не получили данных считаем что всё хорошо и не авария
+
+    //Настроили иконки отображающие состояние
     _failurePixmap = new QPixmap(":/failure.png");
     _goodPixmap = new QPixmap(":/good.png");
+
+    //Добавили виджет с графиком и его настройками
     _pGraph = new SimpleSignalView();
     ui->plotLayout->addWidget(_pGraph);
+
+    //Перерисовали окно
     repaint();
 }
 
 SignalView::~SignalView() { delete ui; }
 
-void SignalView::setType(int type) { _type = type; }
+void SignalView::setType(int type)
+{
+    _type = type; //Указали номер графика
+}
 
-void SignalView::closeEvent(QCloseEvent* event) { emit closed(); }
+void SignalView::closeEvent(QCloseEvent* event)
+{
+    emit closed();  //Сообщили главному окну, что тут так то закрыто уже)
+}
 
 void SignalView::updateSignal(double val1, double val2, double val3, double val4, double time)
 {
+    //Смотрим какой номер у нашего графика и добавляем определённое значение к ряду данных
+    //Проверяем превыщение пределов тоже здесь
     switch (_type)
     {
         case 1:
@@ -48,6 +62,8 @@ void SignalView::updateSignal(double val1, double val2, double val3, double val4
 
 void SignalView::setLimits(signalsLimits_t limits, signalsParams_t params)
 {
+    //Здесь определяем какие должны быть размеры у оси y на графике и задаем эти размеры в
+    //соответствующий виджет, да ещё задаем пределы, чтоб и тоже можно было отрисовывать
     if (_type == 1)
     {
         _upLimit = limits.sinMax;
@@ -84,16 +100,19 @@ void SignalView::setLimits(signalsLimits_t limits, signalsParams_t params)
     }
 }
 
-void SignalView::checkLimits(double val)
+void SignalView::checkLimits(double val)    //Проверяем пределы
 {
-    bool lastIsFailure = _isFailure;
+    bool lastIsFailure = _isFailure;    //Сохранили прошлое состояние - пригодится.
+    //Дальше проверяем в зависимости от номера графика
+    //Определяем аварийное ли состояние
+    //Если нужно, сигнализируем в главное окно, издаем звук.
     if (_type == 1)
     {
         _isFailure = val < _upLimit ? false : true;
         if (_isFailure && ui->checkBox->isChecked() && lastIsFailure == false)
         {
-            qApp->beep();
-            emit showStatus("Превышение порога (сигнал 1)", 1);
+            qApp->beep();   //Звуковой сигнал
+            emit showStatus("Превышение порога (сигнал 1)", 1);//Сигналим в статус бар
         }
     }
     else if (_type == 2)
@@ -101,8 +120,8 @@ void SignalView::checkLimits(double val)
         _isFailure = val > _upLimit ? false : true;
         if (_isFailure && ui->checkBox->isChecked() && lastIsFailure == false)
         {
-            qApp->beep();
-            emit showStatus("Занижение порога (сигнал 2)", 2);
+            qApp->beep();//Звуковой сигнал
+            emit showStatus("Занижение порога (сигнал 2)", 2);//Сигналим в статус бар
         }
     }
 
@@ -115,8 +134,8 @@ void SignalView::checkLimits(double val)
 
         if (_isFailure && ui->checkBox->isChecked() && lastIsFailure == false)
         {
-            qApp->beep();
-            emit showStatus("Авария (сигнал 3)", 3);
+            qApp->beep();//Звуковой сигнал
+            emit showStatus("Авария (сигнал 3)", 3);//Сигналим в статус бар
         }
     }
     else
@@ -125,14 +144,14 @@ void SignalView::checkLimits(double val)
 
         if(_isFailure && ui->checkBox->isChecked() && lastIsFailure == false)
         {
-            qApp->beep();
+            qApp->beep();//Звуковой сигнал
             if (val > _upLimit)
-                emit showStatus("Превышение порога (сигнал 4)", 4);
+                emit showStatus("Превышение порога (сигнал 4)", 4);//Сигналим в статус бар
             else if (val < _lowLimit)
-                emit showStatus("Занижение порога (сигнал 4)", 4);
+                emit showStatus("Занижение порога (сигнал 4)", 4);//Сигналим в статус бар
         }
     }
 
-    if (lastIsFailure != _isFailure)
-        ui->label->setPixmap(_isFailure ? *_failurePixmap : *_goodPixmap);
+    if (lastIsFailure != _isFailure)//Если состояние сменилось
+        ui->label->setPixmap(_isFailure ? *_failurePixmap : *_goodPixmap);  //Поставили либо зеленый либо красный индикатор
 }

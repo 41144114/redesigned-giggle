@@ -9,9 +9,11 @@ int main(int argc, char* argv[])
     QApplication::setStyle(
         "Fusion"); //Изменяет немного внешний вид виджетов (более скруглённые углы, да и вообще вид более приятный)
 
+    //Теперь можно передавать эти структуры через сигналы/слоты
     qRegisterMetaType<signalsParams_t>("signalsParams_t");
     qRegisterMetaType<signalsLimits_t>("signalsLimits_t");
 
+    //Создали и вывели главное окошечко
     MainWindow w;
     w.show();
 
