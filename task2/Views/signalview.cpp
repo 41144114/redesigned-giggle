@@ -52,11 +52,13 @@ void SignalView::setLimits(signalsLimits_t limits, signalsParams_t params)
     {
         _upLimit = limits.sinMax;
         _pGraph->setValueRanges(params.sinAmp > _upLimit ? params.sinAmp : _upLimit, -params.sinAmp);
+        _pGraph->setLimit(_upLimit, _lowLimit, true, false);
     }
     else if (_type == 2)
     {
         _lowLimit = limits.traingleMin;
         _pGraph->setValueRanges(params.traingleMax, params.traingleMin < _lowLimit ? params.traingleMin : _lowLimit);
+        _pGraph->setLimit(_upLimit, _lowLimit, false, true);
     }
     else if (_type == 3)
     {
@@ -67,6 +69,7 @@ void SignalView::setLimits(signalsLimits_t limits, signalsParams_t params)
         max = max > _upLimit ? max : _upLimit;
         min = min < _lowLimit ? min : _lowLimit;
         _pGraph->setValueRanges(max, min);
+        _pGraph->setLimit(_upLimit, _lowLimit, true, true);
     }
     else
     {
@@ -77,6 +80,7 @@ void SignalView::setLimits(signalsLimits_t limits, signalsParams_t params)
         max = max > _upLimit ? max : _upLimit;
         min = min < _lowLimit ? min : _lowLimit;
         _pGraph->setValueRanges(max, min);
+        _pGraph->setLimit(_upLimit, _lowLimit, true, true);
     }
 }
 

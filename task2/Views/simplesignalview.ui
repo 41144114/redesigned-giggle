@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>653</width>
-    <height>387</height>
+    <width>690</width>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,6 +26,24 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item row="6" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Смещение:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="10">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2"/>
+    </widget>
+   </item>
    <item row="1" column="1">
     <widget class="QComboBox" name="comboBox">
      <property name="sizePolicy">
@@ -34,9 +52,19 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <item>
+      <property name="text">
+       <string>Сплошная</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Пунктир</string>
+      </property>
+     </item>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="9" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -48,6 +76,41 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="comboBoxColor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Черный</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Синий</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Красный</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Зелёный</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Желтый</string>
+      </property>
+     </item>
+    </widget>
    </item>
    <item row="2" column="1">
     <widget class="QLabel" name="label">
@@ -62,15 +125,11 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" rowspan="6">
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>Отображать пороги</string>
      </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2"/>
     </widget>
    </item>
    <item row="3" column="1">
@@ -89,20 +148,37 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="comboBoxColor">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="5" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>30</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="spinBox_2">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10</number>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QCheckBox" name="checkBox">
+   <item row="8" column="1">
+    <widget class="QCheckBox" name="checkBox_2">
      <property name="text">
-      <string>Отображать пороги</string>
+      <string>Отобразить 
+смещенный сигнал</string>
      </property>
     </widget>
    </item>

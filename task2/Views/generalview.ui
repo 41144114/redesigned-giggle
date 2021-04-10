@@ -55,7 +55,11 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QSpinBox" name="spinBox"/>
+        <widget class="QSpinBox" name="spinBox">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -70,7 +74,33 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSignal1Color"/>
+          <widget class="QComboBox" name="comboBoxSignal1Color">
+           <item>
+            <property name="text">
+             <string>Черный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Синий</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Красный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Зелёный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Желтый</string>
+            </property>
+           </item>
+          </widget>
          </item>
          <item>
           <widget class="Line" name="line">
@@ -87,7 +117,33 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSignal2Color"/>
+          <widget class="QComboBox" name="comboBoxSignal2Color">
+           <item>
+            <property name="text">
+             <string>Черный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Синий</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Красный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Зелёный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Желтый</string>
+            </property>
+           </item>
+          </widget>
          </item>
          <item>
           <widget class="Line" name="line_2">
@@ -104,7 +160,33 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSignal3Color"/>
+          <widget class="QComboBox" name="comboBoxSignal3Color">
+           <item>
+            <property name="text">
+             <string>Черный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Синий</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Красный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Зелёный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Желтый</string>
+            </property>
+           </item>
+          </widget>
          </item>
          <item>
           <widget class="Line" name="line_3">
@@ -127,7 +209,33 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxSignal4Color"/>
+          <widget class="QComboBox" name="comboBoxSignal4Color">
+           <item>
+            <property name="text">
+             <string>Черный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Синий</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Красный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Зелёный</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Желтый</string>
+            </property>
+           </item>
+          </widget>
          </item>
         </layout>
        </item>

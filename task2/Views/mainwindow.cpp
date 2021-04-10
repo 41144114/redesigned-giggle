@@ -20,7 +20,7 @@ const QVector<int> priority = {2, 1, 3, 4};
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    setWindowTitle("Мониторинг сигналов");
     allocateMemory();
     setupToolBar();
     setupMainMenu();

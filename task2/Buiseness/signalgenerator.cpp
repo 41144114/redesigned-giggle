@@ -103,6 +103,12 @@ void SignalGenerator::generateSignal4()
 void SignalGenerator::setParams(signalsParams_t params)
 {
     _curParams = params;
-    _pUpdateTimer->stop();
-    _pUpdateTimer->setInterval(1000 / _curParams.generateFreq);
+    if(_pUpdateTimer->isActive())
+    {
+        _pUpdateTimer->stop();
+        _pUpdateTimer->setInterval(1000 / _curParams.generateFreq);
+        _pUpdateTimer->start();
+    }
+    else
+        _pUpdateTimer->setInterval(1000 / _curParams.generateFreq);
 }

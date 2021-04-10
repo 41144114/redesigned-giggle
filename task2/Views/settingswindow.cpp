@@ -6,6 +6,9 @@
 SettingsWindow::SettingsWindow(QWidget* parent) : QWidget(parent), ui(new Ui::SettingsWindow)
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(0);
+    setWindowTitle("Настройки сигналов");
+
     loadFromRegistry();
 }
 
@@ -91,16 +94,16 @@ void SettingsWindow::saveToRegistry()
     obj.setValue("TraingleRaiseK", _curParams.traingleRaiseK);
     obj.setValue("TraingleUnriseK", _curParams.traingleUnriseK);
 
-    obj.setValue("randomVariantMax", _curParams.variantMax);
-    obj.setValue("randomVariantMin", _curParams.variantMin);
-    obj.setValue("randomVariantPeriod", _curParams.variantPeriod);
+    obj.setValue("VariantMax", _curParams.variantMax);
+    obj.setValue("VariantMin", _curParams.variantMin);
+    obj.setValue("VariantPeriod", _curParams.variantPeriod);
 
     obj.setValue("SinMax", _curLimits.sinMax);
     obj.setValue("TraingleMin", _curLimits.traingleMin);
     obj.setValue("RandomMax", _curLimits.randomMax);
     obj.setValue("RandomMin", _curLimits.randomMin);
-    obj.setValue("VariantMax", _curLimits.variantMax);
-    obj.setValue("VariantMin", _curLimits.variantMin);
+    obj.setValue("VariantMaxLimit", _curLimits.variantMax);
+    obj.setValue("VariantMinLimit", _curLimits.variantMin);
 }
 
 void SettingsWindow::loadFromRegistry()
@@ -166,6 +169,10 @@ void SettingsWindow::loadFromRegistry()
     else
         _curParams.variantPeriod = 1;
 
+
+
+
+
     if (obj.contains("SinMax"))
         _curLimits.sinMax = obj.value("SinMax").toDouble();
     else
@@ -186,13 +193,13 @@ void SettingsWindow::loadFromRegistry()
     else
         _curLimits.randomMin = 0;
 
-    if (obj.contains("VariantMax"))
-        _curLimits.variantMax = obj.value("VariantMax").toDouble();
+    if (obj.contains("VariantMaxLimit"))
+        _curLimits.variantMax = obj.value("VariantMaxLimit").toDouble();
     else
         _curLimits.variantMax = 110;
 
-    if (obj.contains("VariantMin"))
-        _curLimits.variantMin = obj.value("VariantMin").toDouble();
+    if (obj.contains("VariantMinLimit"))
+        _curLimits.variantMin = obj.value("VariantMinLimit").toDouble();
     else
         _curLimits.variantMin = -10;
 }
