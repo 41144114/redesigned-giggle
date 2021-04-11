@@ -298,7 +298,10 @@ void MainWindow::onAboutProgram()
     QMessageBox msg;
     msg.setWindowTitle("О программе");
     msg.setIcon(QMessageBox::Information);
-    msg.setText("Задание №2 студентки .....");
+    msg.setText("Задание №2 \r\n"
+                "по дисциплине \"Разработка пользовательского интерфейса в компьютерных управляющих системах\"\r\n"
+                "студента группы АТ1-19-1М\r\n"
+                "Полыгаловой Дарьи Константиновны");
     msg.exec();
 }
 
