@@ -2,6 +2,7 @@
 
 #include <QTimer>
 #include <QDebug>
+#include "math.h"
 const double pi = 3.1415926535897932384626433832795;
 
 SignalGenerator::SignalGenerator(QObject* parent) : QObject(parent) {}
