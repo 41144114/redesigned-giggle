@@ -14,10 +14,10 @@ GeneralView::GeneralView(QWidget* parent) : QWidget(parent), ui(new Ui::GeneralV
     _pPlot = new QCustomPlot(this); //Создали объект графика
 
     //Добавили графики для каждого сигнала
-    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis);//3
-    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis);//4
-    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis);//1
-    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis);//2
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis); //3
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis); //4
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis); //1
+    _pPlot->addGraph(_pPlot->xAxis, _pPlot->yAxis); //2
 
     _pPlot->yAxis->setRange(-150, 150);
 
@@ -41,6 +41,15 @@ GeneralView::~GeneralView() { delete ui; }
 void GeneralView::closeEvent(QCloseEvent* event)
 {
     emit closed(); // Сообщили в главное окно, что мы тут так то закрылись уже.
+}
+
+void GeneralView::clearData()
+{
+    _timeData.clear();
+    _data1.clear();
+    _data2.clear();
+    _data3.clear();
+    _data4.clear();
 }
 
 void GeneralView::updateSignals(double val1, double val2, double val3, double val4, double time)
@@ -75,18 +84,27 @@ void GeneralView::updateSignals(double val1, double val2, double val3, double va
     _pPlot->replot();
 }
 
-
 //Дальше все функции по одному принципу работают:
 void GeneralView::on_comboBoxSignal1Color_currentIndexChanged(int index)
 {
     QPen pen;
-    switch(index)   //Посмотрели какой цвет желает юзер
-    {   //Установили цвет в объект pen
-        case 0: pen.setColor(Qt::black); break;
-        case 1: pen.setColor(Qt::blue); break;
-        case 2: pen.setColor(Qt::red); break;
-        case 3: pen.setColor(Qt::green); break;
-        case 4: pen.setColor(Qt::yellow); break;
+    switch (index) //Посмотрели какой цвет желает юзер
+    {              //Установили цвет в объект pen
+        case 0:
+            pen.setColor(Qt::black);
+            break;
+        case 1:
+            pen.setColor(Qt::blue);
+            break;
+        case 2:
+            pen.setColor(Qt::red);
+            break;
+        case 3:
+            pen.setColor(Qt::green);
+            break;
+        case 4:
+            pen.setColor(Qt::yellow);
+            break;
     }
 
     //Теперь нужный график рисуем нужной ручкой
@@ -99,13 +117,23 @@ void GeneralView::on_comboBoxSignal1Color_currentIndexChanged(int index)
 void GeneralView::on_comboBoxSignal2Color_currentIndexChanged(int index)
 {
     QPen pen;
-    switch(index)
+    switch (index)
     {
-        case 0: pen.setColor(Qt::black); break;
-        case 1: pen.setColor(Qt::blue); break;
-        case 2: pen.setColor(Qt::red); break;
-        case 3: pen.setColor(Qt::green); break;
-        case 4: pen.setColor(Qt::yellow); break;
+        case 0:
+            pen.setColor(Qt::black);
+            break;
+        case 1:
+            pen.setColor(Qt::blue);
+            break;
+        case 2:
+            pen.setColor(Qt::red);
+            break;
+        case 3:
+            pen.setColor(Qt::green);
+            break;
+        case 4:
+            pen.setColor(Qt::yellow);
+            break;
     }
     _pPlot->graph(indexGraph2)->setPen(pen);
     _pPlot->replot();
@@ -114,13 +142,23 @@ void GeneralView::on_comboBoxSignal2Color_currentIndexChanged(int index)
 void GeneralView::on_comboBoxSignal3Color_currentIndexChanged(int index)
 {
     QPen pen;
-    switch(index)
+    switch (index)
     {
-        case 0: pen.setColor(Qt::black); break;
-        case 1: pen.setColor(Qt::blue); break;
-        case 2: pen.setColor(Qt::red); break;
-        case 3: pen.setColor(Qt::green); break;
-        case 4: pen.setColor(Qt::yellow); break;
+        case 0:
+            pen.setColor(Qt::black);
+            break;
+        case 1:
+            pen.setColor(Qt::blue);
+            break;
+        case 2:
+            pen.setColor(Qt::red);
+            break;
+        case 3:
+            pen.setColor(Qt::green);
+            break;
+        case 4:
+            pen.setColor(Qt::yellow);
+            break;
     }
     _pPlot->graph(indexGraph3)->setPen(pen);
     _pPlot->replot();
@@ -129,13 +167,23 @@ void GeneralView::on_comboBoxSignal3Color_currentIndexChanged(int index)
 void GeneralView::on_comboBoxSignal4Color_currentIndexChanged(int index)
 {
     QPen pen;
-    switch(index)
+    switch (index)
     {
-        case 0: pen.setColor(Qt::black); break;
-        case 1: pen.setColor(Qt::blue); break;
-        case 2: pen.setColor(Qt::red); break;
-        case 3: pen.setColor(Qt::green); break;
-        case 4: pen.setColor(Qt::yellow); break;
+        case 0:
+            pen.setColor(Qt::black);
+            break;
+        case 1:
+            pen.setColor(Qt::blue);
+            break;
+        case 2:
+            pen.setColor(Qt::red);
+            break;
+        case 3:
+            pen.setColor(Qt::green);
+            break;
+        case 4:
+            pen.setColor(Qt::yellow);
+            break;
     }
     _pPlot->graph(indexGraph4)->setPen(pen);
     _pPlot->replot();
@@ -154,10 +202,10 @@ void GeneralView::on_checkBoxSignal2_clicked()
 
 void GeneralView::on_checkBoxSignal3_clicked()
 {
-     _pPlot->graph(indexGraph3)->setVisible(ui->checkBoxSignal3->isChecked());
+    _pPlot->graph(indexGraph3)->setVisible(ui->checkBoxSignal3->isChecked());
 }
 
 void GeneralView::on_checkBoxSignal4_clicked()
 {
-     _pPlot->graph(indexGraph4)->setVisible(ui->checkBoxSignal4->isChecked());
+    _pPlot->graph(indexGraph4)->setVisible(ui->checkBoxSignal4->isChecked());
 }

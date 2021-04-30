@@ -19,6 +19,7 @@ public:
 
 public slots:
     void updateSignals(double val1, double val2, double val3, double val4, double time);
+    void clearData();
 
 signals:
     void closed();

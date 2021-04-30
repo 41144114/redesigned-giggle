@@ -179,6 +179,7 @@ void MainWindow::setupConnections()
     //Посоединяли различные объекты между собой. Чтоб сгенерированный сигнал доходил до интерфейса
     //а заданные настройки доходили до генератора сигналов
     connect(this, &MainWindow::signalStart, generator, &SignalGenerator::startGenerate);
+    connect(this, &MainWindow::signalStart, _signalView0, &GeneralView::clearData);
     connect(this, &MainWindow::signalStop, generator, &SignalGenerator::stopGenerate);
 
     connect(generator, &SignalGenerator::updateSignals, _signalView1, &SignalView::updateSignal);
@@ -193,7 +194,6 @@ void MainWindow::setupConnections()
     connect(_settingsWindow, &SettingsWindow::signalSetLimits, _signalView3, &SignalView::setLimits);
     connect(_settingsWindow, &SettingsWindow::signalSetLimits, _signalView4, &SignalView::setLimits);
 
-
     connect(_signalView1, &SignalView::showStatus, this, &MainWindow::onShowStatus);
     connect(_signalView2, &SignalView::showStatus, this, &MainWindow::onShowStatus);
     connect(_signalView3, &SignalView::showStatus, this, &MainWindow::onShowStatus);
@@ -204,14 +204,14 @@ void MainWindow::onPb0Click()
 {
     if (_pb0->isChecked())
     {
-        _subWindow0 = ui->mdiArea->addSubWindow(_signalView0);  //Добавили виджет в суб окно
-        _subWindow0->setWindowTitle("Все сигналы"); //Настроили заголовок суб окна
-        _subWindow0->show();    //Показали суб окно
+        _subWindow0 = ui->mdiArea->addSubWindow(_signalView0); //Добавили виджет в суб окно
+        _subWindow0->setWindowTitle("Все сигналы");            //Настроили заголовок суб окна
+        _subWindow0->show();                                   //Показали суб окно
     }
     else
     {
         ui->mdiArea->removeSubWindow(_signalView0); //Удалили виджет из суб окна
-        _subWindow0->close();   //Закрыли суб окно
+        _subWindow0->close();                       //Закрыли суб окно
     }
 }
 
@@ -282,13 +282,13 @@ void MainWindow::onPbOnOffClick()
     if (_pbOnOff->isChecked())
         emit signalStart(); //Стартуем!
     else
-        emit signalStop();//Останавливаем генерацию сигнала
+        emit signalStop(); //Останавливаем генерацию сигнала
 }
 
 void MainWindow::onScreenShotClick()
 {
-    this->raise();  //Подняли текущее окно (чтоб ничего его не перегораживало и сделали скрин (след. строка)
-                    //Тут скриншот падает в буфер обмена сразу
+    this->raise(); //Подняли текущее окно (чтоб ничего его не перегораживало и сделали скрин (след. строка)
+                   //Тут скриншот падает в буфер обмена сразу
     QApplication::clipboard()->setPixmap(QPixmap(this->windowHandle()->screen()->grabWindow(QWidget::winId())));
 }
 
@@ -312,22 +312,24 @@ void MainWindow::onAboutQt()
 
 void MainWindow::onSetupSignals()
 {
-    _settingsWindow->showCurParams(); //Вместо обычного show, чтоб сначала считать параметры из реестра и отобразить их в окне
+    _settingsWindow
+        ->showCurParams(); //Вместо обычного show, чтоб сначала считать параметры из реестра и отобразить их в окне
 }
 
 void MainWindow::onShowStatus(QString status, int type)
 {
     //Отображение статуса (аварийных ситуаций)
-    if (ui->statusBar->currentMessage().isEmpty()) //Если сейчас никакой статус не отображается, то можно писать что угодно
+    if (ui->statusBar->currentMessage()
+            .isEmpty()) //Если сейчас никакой статус не отображается, то можно писать что угодно
     {
-        curMessageType = type;  //Запомнили от какого окна пришел текущий статус для сравнения приоритетов
+        curMessageType = type; //Запомнили от какого окна пришел текущий статус для сравнения приоритетов
         ui->statusBar->showMessage(status); //Отобразили статус
     }
     else
     {
-        if (status.isEmpty() && !checkPriority(curMessageType, type))   //Если статус пустой, и не приоритетный
+        if (status.isEmpty() && !checkPriority(curMessageType, type)) //Если статус пустой, и не приоритетный
             return;
-        else//Если статус не пустой и приоритет достаточный, чтобы отображаться, то
+        else //Если статус не пустой и приоритет достаточный, чтобы отображаться, то
         {
             if (checkPriority(curMessageType, type))
             {
@@ -337,9 +339,9 @@ void MainWindow::onShowStatus(QString status, int type)
     }
 
     // Смотрим какое окно надо поднять, а может и открыть
-    if(status.contains("1"))
+    if (status.contains("1"))
     {
-        if(_pb1->isChecked() == false)
+        if (_pb1->isChecked() == false)
         {
             _pb1->setChecked(true);
             onPb1Click();
@@ -347,9 +349,9 @@ void MainWindow::onShowStatus(QString status, int type)
         _subWindow1->raise();
         _subWindow1->setFocus();
     }
-    else if(status.contains("2"))
+    else if (status.contains("2"))
     {
-        if(_pb2->isChecked() == false)
+        if (_pb2->isChecked() == false)
         {
             _pb2->setChecked(true);
             onPb2Click();
@@ -357,9 +359,9 @@ void MainWindow::onShowStatus(QString status, int type)
         _subWindow2->raise();
         _subWindow2->setFocus();
     }
-    else if(status.contains("3"))
+    else if (status.contains("3"))
     {
-        if(_pb3->isChecked() == false)
+        if (_pb3->isChecked() == false)
         {
             _pb3->setChecked(true);
             onPb3Click();
@@ -367,9 +369,9 @@ void MainWindow::onShowStatus(QString status, int type)
         _subWindow3->raise();
         _subWindow3->setFocus();
     }
-    else if(status.contains("4"))
+    else if (status.contains("4"))
     {
-        if(_pb4->isChecked() == false)
+        if (_pb4->isChecked() == false)
         {
             _pb4->setChecked(true);
             onPb4Click();
@@ -384,7 +386,7 @@ bool MainWindow::checkPriority(int curMsg, int newMsg)
     //Сравниваем приоритеты сообщений
     if (priority.contains(curMsg) && priority.contains(newMsg)) //Если такие индексы вообще есть в списке приоритетов
     {
-        return priority.indexOf(newMsg) <= priority.indexOf(curMsg);    //Возвращаем результат сравнения
+        return priority.indexOf(newMsg) <= priority.indexOf(curMsg); //Возвращаем результат сравнения
     }
     else
         return false;
